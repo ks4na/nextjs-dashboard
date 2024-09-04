@@ -11,7 +11,7 @@ import { Button } from './button';
 import { useActionState } from 'react';
 import { authenticate } from '@/app/lib/actions';
 
-export default function LoginForm() {
+export default function LoginForm({ redirectTo }: { redirectTo: string }) {
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined
@@ -23,6 +23,7 @@ export default function LoginForm() {
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Please log in to continue.
         </h1>
+        <input type="hidden" name="redirectTo" value={redirectTo} />
         <div className="w-full">
           <div>
             <label
