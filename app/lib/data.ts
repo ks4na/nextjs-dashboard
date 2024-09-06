@@ -8,8 +8,9 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+import {cache} from 'react'
 
-export async function fetchRevenue() {
+export const fetchRevenue = cache(async function fetchRevenue() {
   try {
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
@@ -26,7 +27,7 @@ export async function fetchRevenue() {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch revenue data.');
   }
-}
+})
 
 export async function fetchLatestInvoices() {
   try {
