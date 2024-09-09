@@ -7,10 +7,16 @@ import bcrypt from 'bcrypt';
 
 async function getUser(email: string) {
   try {
-    const user = await sql`
-      SELECT * FROM users WHERE email=${email}
-    `;
-    return user.rows[0];
+    // const user = await sql`
+    //   SELECT * FROM users WHERE email=${email}
+    // `;
+    // return user.rows[0];
+    return {
+      id: '410544b2-4001-4271-9855-fec4b6a6442a',
+      name: 'User',
+      email: 'user@nextmail.com',
+      password: '$2b$10$BcGF.0t48bk6RWoeE3g3feo2hkivubhDvASxQNpvMGBdqIFxQrbaW',
+    };
   } catch (err) {
     console.log('Failed to fetch user: ', err);
     throw new Error('Failed to fetch user.');
