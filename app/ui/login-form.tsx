@@ -8,22 +8,52 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
-import { useActionState } from 'react';
-import { authenticate } from '@/app/lib/actions';
+import { FormEvent, useState, useTransition } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm({ redirectTo }: { redirectTo: string }) {
-  const [errorMessage, formAction, isPending] = useActionState(
-    authenticate,
-    undefined
-  );
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [errorMessage, setErrorMessage] = useState('');
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    startTransition(async () => {
+      const resp = await signIn('credentials', {
+        email: formData.get('email'),
+        password: formData.get('password'),
+        redirect: false,
+      });
+      console.log('resp: ', resp);
+
+      if (!resp || !resp.ok) {
+        setErrorMessage('Request failed');
+        return;
+      }
+      if (resp.error) {
+        if (resp.error === 'CredentialsSignin') {
+          setErrorMessage('Invalid credentials.');
+        } else {
+          setErrorMessage('Someting went wrong.');
+        }
+        return;
+      }
+
+      console.log('redirectTo: ', redirectTo);
+      router.push(redirectTo);
+    });
+  }
 
   return (
-    <form action={formAction} className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Please log in to continue.
         </h1>
-        <input type="hidden" name="redirectTo" value={redirectTo} />
         <div className="w-full">
           <div>
             <label
