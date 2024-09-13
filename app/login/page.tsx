@@ -6,15 +6,7 @@ export const metadata: Metadata = {
   title: 'Login Page',
 };
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams?: {
-    callbackUrl?: string;
-  };
-}) {
-  const redirectTo = searchParams?.callbackUrl || '/dashboard';
-
+export default function LoginPage() {
   return (
     <main className="flex items-center justify-center md:h-screen">
       <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
@@ -23,7 +15,7 @@ export default function LoginPage({
             <AcmeLogo />
           </div>
         </div>
-        <LoginForm redirectTo={redirectTo} />
+        <LoginForm />
       </div>
     </main>
   );

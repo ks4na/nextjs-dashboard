@@ -8,10 +8,11 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
-import { useActionState } from 'react';
+import { Suspense, useActionState } from 'react';
 import { authenticate } from '@/app/lib/actions';
+import RedirectToInput from './login/input-hidden-redirect-to';
 
-export default function LoginForm({ redirectTo }: { redirectTo: string }) {
+export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined
@@ -23,7 +24,9 @@ export default function LoginForm({ redirectTo }: { redirectTo: string }) {
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Please log in to continue.
         </h1>
-        <input type="hidden" name="redirectTo" value={redirectTo} />
+        <Suspense>
+          <RedirectToInput />
+        </Suspense>
         <div className="w-full">
           <div>
             <label
